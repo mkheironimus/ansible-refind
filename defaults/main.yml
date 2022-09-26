@@ -1,0 +1,8 @@
+---
+refind_version: "0.13.3.1"
+refind_dir: /opt/refind
+refind_url: "https://sourceforge.net/projects/refind/files/{{ refind_version }}/refind-bin-{{ refind_version }}.zip/download"
+refind_checksum: sha256:44a981538cf06e683bc095e11694ce8508826fcc6ca6229e116938575e7c4c54
+
+refind_packages:
+  - unzip

@@ -1,0 +1,37 @@
+---
+- name: Install required packages
+  ansible.builtin.package:
+    name: "{{ refind_packages }}"
+
+- name: Create rEFInd directory
+  ansible.builtin.file:
+    path: "{{ refind_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Download rEFInd
+  ansible.builtin.get_url:
+    url: "{{ refind_url }}"
+    dest: "{{ refind_dir }}/refind-bin-{{ refind_version }}.zip"
+    checksum: "{{ refind_checksum }}"
+    owner: root
+    group: root
+    mode: "0644"
+  register: refind_dl
+
+- name: Extract rEFInd zip
+  ansible.builtin.unarchive:
+    src: "{{ refind_dir }}/refind-bin-{{ refind_version }}.zip"
+    dest: "{{ refind_dir }}"
+    remote_src: yes
+  when: refind_dl.changed
+
+- name: Create rEFInd symlink
+  ansible.builtin.file:
+    src: "{{ refind_dir }}/refind-bin-{{ refind_version }}"
+    dest: "{{ refind_dir }}/refind"
+    owner: root
+    group: root
+    state: link
